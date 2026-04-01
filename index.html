@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>APEX Engineering Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: #2a2a2a;
+    --amber: #f0a500;
+    --amber-dim: #c07e00;
+    --amber-glow: rgba(240,165,0,0.12);
+    --text: #e8e0d5;
+    --text-muted: #7a7570;
+    --text-dim: #4a4540;
+    --white: #f5f2ee;
+    --nav-bg: rgba(13,13,13,0.88);
+    --grid-color: rgba(240,165,0,0.025);
+    --hero-bg-text: rgba(255,255,255,0.02);
+    --img-filter: brightness(0.75) contrast(1.1);
+    --img-filter-about: brightness(0.8) contrast(1.05);
+  }
+
+  html[data-theme="light"] {
+    --bg: #f5f1eb;
+    --surface: #ede8e0;
+    --surface2: #e4ddd3;
+    --border: #cec7bc;
+    --amber: #c47d00;
+    --amber-dim: #a06500;
+    --amber-glow: rgba(196,125,0,0.10);
+    --text: #1e1a15;
+    --text-muted: #6b6258;
+    --text-dim: #a09890;
+    --white: #1e1a15;
+    --nav-bg: rgba(245,241,235,0.92);
+    --grid-color: rgba(196,125,0,0.06);
+    --hero-bg-text: rgba(0,0,0,0.04);
+    --img-filter: brightness(0.88) contrast(1.05);
+    --img-filter-about: brightness(0.9) contrast(1.0);
+  }
+
+  html {
+    transition: background-color 0.35s ease, color 0.35s ease;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    transition: background-color 0.35s ease, color 0.35s ease;
+  }
+
+  /* ── GRID OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+    transition: background-image 0.35s ease;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 4px;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-logo span {
+    color: var(--amber);
+  }
+
+  .nav-logo-mark {
+    width: 32px; height: 32px;
+    border: 2px solid var(--amber);
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    color: var(--amber);
+    font-weight: 500;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--amber); }
+
+  .nav-cta {
+    background: var(--amber);
+    color: #000 !important;
+    padding: 8px 20px;
+    font-weight: 500;
+  }
+
+  .nav-cta:hover { background: var(--amber-dim); color: #000 !important; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left { z-index: 1; }
+
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--amber);
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 8vw, 128px);
+    line-height: 0.92;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 32px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    font-family: 'Fraunces', serif;
+    color: var(--amber);
+    font-weight: 300;
+  }
+
+  .hero-desc {
+    color: var(--text-muted);
+    max-width: 420px;
+    font-size: 13px;
+    line-height: 1.9;
+    margin-bottom: 48px;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--amber);
+    color: #000;
+    border: none;
+    padding: 14px 32px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--amber-dim); transform: translateY(-1px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 14px 32px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-outline:hover { border-color: var(--amber); color: var(--amber); }
+
+  .hero-right {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .hero-image-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .hero-image-wrap img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    display: block;
+    filter: var(--img-filter);
+  }
+
+  .hero-image-border {
+    position: absolute;
+    top: 16px; left: 16px; right: -16px; bottom: -16px;
+    border: 1px solid var(--amber);
+    z-index: -1;
+  }
+
+  .hero-stats {
+    position: absolute;
+    bottom: -24px;
+    left: -24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px 32px;
+    display: flex;
+    gap: 40px;
+  }
+
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--amber);
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 4px;
+    display: block;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    bottom: 40px;
+    right: -20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 200px;
+    color: var(--hero-bg-text);
+    letter-spacing: 10px;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  /* ── SECTION COMMONS ── */
+  section { position: relative; z-index: 1; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 64px;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--amber);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 5vw, 72px);
+    line-height: 0.95;
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+
+  .section-title em {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text-muted);
+  }
+
+  /* ── PROJECTS ── */
+  #projects {
+    padding: 120px 48px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .project-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--bg);
+  }
+
+  .project-card:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .project-card img {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease, filter 0.4s ease;
+    filter: brightness(0.7) grayscale(0.3);
+  }
+
+  .project-card:hover img {
+    transform: scale(1.05);
+    filter: brightness(0.5) grayscale(0);
+  }
+
+  .project-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+  }
+
+  .project-card:hover .project-overlay { opacity: 1; }
+
+  .project-cat {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 6px;
+  }
+
+  .project-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 1px;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .project-card:first-child .project-name { font-size: 40px; }
+
+  .project-location {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .project-arrow {
+    position: absolute;
+    top: 20px; right: 20px;
+    width: 36px; height: 36px;
+    border: 1px solid var(--amber);
+    display: grid;
+    place-items: center;
+    color: var(--amber);
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.3s, transform 0.3s;
+    font-size: 16px;
+  }
+
+  .project-card:hover .project-arrow { opacity: 1; transform: translateY(0); }
+
+  /* ── ABOUT ── */
+  #about {
+    padding: 120px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .about-image-wrap {
+    position: relative;
+  }
+
+  .about-image-wrap img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    filter: var(--img-filter-about);
+    display: block;
+  }
+
+  .about-image-accent {
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 60%; height: 40%;
+    border: 1px solid var(--amber);
+    z-index: -1;
+  }
+
+  .about-badge {
+    position: absolute;
+    bottom: 28px; right: -28px;
+    background: var(--amber);
+    color: #000;
+    padding: 20px;
+    text-align: center;
+    width: 120px;
+  }
+
+  .about-badge-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    line-height: 1;
+    display: block;
+  }
+
+  .about-badge-text {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    line-height: 1.4;
+    margin-top: 4px;
+    display: block;
+  }
+
+  .about-body p {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  .about-values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .value-item {
+    border-left: 2px solid var(--amber);
+    padding-left: 16px;
+  }
+
+  .value-item strong {
+    display: block;
+    color: var(--white);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .value-item span {
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+
+  /* ── SERVICES BAR ── */
+  #services {
+    background: var(--amber);
+    padding: 28px 48px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow: hidden;
+    border-top: 1px solid var(--amber-dim);
+  }
+
+  .services-marquee {
+    display: flex;
+    gap: 48px;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+
+  .services-marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: #000;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .services-marquee-item::after {
+    content: '✦';
+    font-size: 10px;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── FAQ ── */
+  #faq {
+    padding: 120px 48px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .faq-sidebar p {
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.8;
+    margin-top: 20px;
+  }
+
+  .faq-list { display: flex; flex-direction: column; }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    text-align: left;
+    padding: 22px 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    transition: color 0.2s;
+  }
+
+  .faq-question:hover { color: var(--amber); }
+  .faq-question.open { color: var(--amber); }
+
+  .faq-icon {
+    width: 22px; height: 22px;
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    font-size: 14px;
+    color: var(--amber);
+    transition: transform 0.3s;
+  }
+
+  .faq-question.open .faq-icon { transform: rotate(45deg); }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .faq-answer-inner {
+    padding: 0 0 22px;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.9;
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    padding: 120px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .contact-info h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    line-height: 0.95;
+    color: var(--white);
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+  }
+
+  .contact-info h2 em {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--amber);
+  }
+
+  .contact-info p {
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.9;
+    margin-bottom: 40px;
+  }
+
+  .contact-details { display: flex; flex-direction: column; gap: 20px; }
+
+  .contact-detail-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .contact-icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    color: var(--amber);
+    flex-shrink: 0;
+    font-size: 14px;
+  }
+
+  .contact-detail-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 2px;
+  }
+
+  .contact-detail-value {
+    font-size: 12px;
+    color: var(--text);
+  }
+
+  /* ── FORM ── */
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .form-input, .form-select, .form-textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+    appearance: none;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--amber);
+  }
+
+  .form-textarea { resize: vertical; min-height: 120px; }
+
+  .form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23f0a500'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    cursor: pointer;
+  }
+
+  .form-select option { background: var(--surface2); }
+
+  .form-submit {
+    background: var(--amber);
+    color: #000;
+    border: none;
+    padding: 16px 32px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    font-weight: 500;
+  }
+
+  .form-submit:hover { background: var(--amber-dim); transform: translateY(-1px); }
+  .form-submit:active { transform: translateY(0); }
+
+  .form-submit svg { width: 14px; height: 14px; }
+
+  .form-success {
+    display: none;
+    background: var(--amber-glow);
+    border: 1px solid var(--amber);
+    padding: 16px 20px;
+    color: var(--amber);
+    font-size: 12px;
+    margin-top: 8px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: var(--text-muted);
+  }
+
+  .footer-brand span { color: var(--amber); }
+
+  .footer-copy {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--amber); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border) 30%, var(--border) 70%, transparent);
+    margin: 0 48px;
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── THEME TOGGLE ── */
+  .theme-toggle {
+    position: relative;
+    width: 52px;
+    height: 28px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.35s, border-color 0.35s;
+    outline: none;
+    padding: 0;
+  }
+
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+
+  .theme-toggle-thumb {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--amber);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  html[data-theme="light"] .theme-toggle-thumb {
+    transform: translateX(24px);
+  }
+
+  .theme-toggle-track {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6px;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .theme-toggle-icon {
+    font-size: 11px;
+    line-height: 1;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+
+  html[data-theme="dark"] .theme-toggle-icon.moon { opacity: 1; }
+  html[data-theme="light"] .theme-toggle-icon.sun  { opacity: 1; }
+
+  .theme-toggle-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: color 0.3s;
+    white-space: nowrap;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .theme-toggle-label { display: none; }
+    #hero { grid-template-columns: 1fr; padding: 100px 24px 80px; }
+    .hero-right { display: none; }
+    #about { grid-template-columns: 1fr; padding: 80px 24px; }
+    #contact { grid-template-columns: 1fr; padding: 80px 24px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card:first-child { grid-column: span 1; grid-row: span 1; }
+    #projects, #faq { padding: 80px 24px; }
+    .faq-grid { grid-template-columns: 1fr; gap: 40px; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { padding: 28px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-mark">AX</div>
+    APEX <span>Engineering</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+  <div class="nav-right">
+    <span class="theme-toggle-label" id="theme-label">Dark</span>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme">
+      <div class="theme-toggle-track">
+        <span class="theme-toggle-icon moon">🌙</span>
+        <span class="theme-toggle-icon sun">☀️</span>
+      </div>
+      <div class="theme-toggle-thumb"></div>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Est. 1998 — Global Engineering Group</div>
+    <h1 class="hero-title">
+      Built to<br/>
+      <em>Last</em><br/>
+      Forever
+    </h1>
+    <p class="hero-desc">
+      Apex Engineering Group delivers precision-crafted infrastructure, structural design, and civil engineering solutions across three continents. We engineer the future — one project at a time.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#contact" class="btn-outline">Get a Quote</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-image-wrap">
+      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" alt="Construction site" />
+      <div class="hero-image-border"></div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">340+</span>
+          <span class="stat-label">Projects</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">26</span>
+          <span class="stat-label">Countries</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">98%</span>
+          <span class="stat-label">On-time</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-bg-text">APEX</div>
+</section>
+
+<!-- SERVICES MARQUEE -->
+<div id="services">
+  <div class="services-marquee">
+    <div class="services-marquee-item">Structural Engineering</div>
+    <div class="services-marquee-item">Civil Infrastructure</div>
+    <div class="services-marquee-item">Bridge Design</div>
+    <div class="services-marquee-item">High-Rise Construction</div>
+    <div class="services-marquee-item">Industrial Facilities</div>
+    <div class="services-marquee-item">Environmental Engineering</div>
+    <div class="services-marquee-item">Urban Development</div>
+    <div class="services-marquee-item">Geotechnical Services</div>
+    <!-- duplicate for seamless loop -->
+    <div class="services-marquee-item">Structural Engineering</div>
+    <div class="services-marquee-item">Civil Infrastructure</div>
+    <div class="services-marquee-item">Bridge Design</div>
+    <div class="services-marquee-item">High-Rise Construction</div>
+    <div class="services-marquee-item">Industrial Facilities</div>
+    <div class="services-marquee-item">Environmental Engineering</div>
+    <div class="services-marquee-item">Urban Development</div>
+    <div class="services-marquee-item">Geotechnical Services</div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header fade-up">
+    <div>
+      <div class="section-label">Our Work</div>
+      <h2 class="section-title">Finished <em>Projects</em></h2>
+    </div>
+    <a href="#contact" class="btn-outline" style="align-self:flex-end">Start a Project →</a>
+  </div>
+
+  <div class="projects-grid">
+
+    <div class="project-card fade-up">
+      <img src="https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=900&q=80" alt="Meridian Tower" />
+      <div class="project-overlay">
+        <div class="project-cat">Structural — 2023</div>
+        <div class="project-name">Meridian Tower Complex</div>
+        <div class="project-location">📍 Dubai, UAE  —  62 Floors, 248m Height</div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+    <div class="project-card fade-up">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Harbor Bridge" />
+      <div class="project-overlay">
+        <div class="project-cat">Civil Infrastructure — 2022</div>
+        <div class="project-name">Coastal Harbor Bridge</div>
+        <div class="project-location">📍 Sydney, Australia  —  1.4km Span</div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+    <div class="project-card fade-up">
+      <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80" alt="Urban Plaza" />
+      <div class="project-overlay">
+        <div class="project-cat">Urban Development — 2023</div>
+        <div class="project-name">Nexus Urban Plaza</div>
+        <div class="project-location">📍 Singapore  —  4.2 Hectare Site</div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+    <div class="project-card fade-up">
+      <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&q=80" alt="Solar Farm" />
+      <div class="project-overlay">
+        <div class="project-cat">Environmental — 2024</div>
+        <div class="project-name">Solaris Energy Park</div>
+        <div class="project-location">📍 Nevada, USA  —  500 MW Capacity</div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+    <div class="project-card fade-up">
+      <img src="https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=600&q=80" alt="Data Center" />
+      <div class="project-overlay">
+        <div class="project-cat">Industrial — 2024</div>
+        <div class="project-name">DataVault Campus</div>
+        <div class="project-location">📍 Frankfurt, Germany  —  42,000 m²</div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+    <div class="project-card fade-up">
+      <img src="https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=600&q=80" alt="Highway Interchange" />
+      <div class="project-overlay">
+        <div class="project-cat">Infrastructure — 2021</div>
+        <div class="project-name">Metro Ring Expressway</div>
+        <div class="project-location">📍 Manila, Philippines  —  38km Route</div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-image-wrap fade-up">
+    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=700&q=80" alt="Engineering team" />
+    <div class="about-image-accent"></div>
+    <div class="about-badge">
+      <span class="about-badge-num">26</span>
+      <span class="about-badge-text">Years of Excellence</span>
+    </div>
+  </div>
+
+  <div class="about-body fade-up">
+    <div class="section-label">Who We Are</div>
+    <h2 class="section-title" style="margin-bottom:28px">Engineering <em>with</em><br/>Purpose</h2>
+    <p>
+      Founded in 1998, Apex Engineering Group has grown from a regional consultancy into one of the world's most trusted engineering firms. We blend deep technical expertise with innovative thinking to deliver structures that stand the test of time.
+    </p>
+    <p>
+      Our multidisciplinary team of over 800 engineers, architects, and specialists operates from 12 offices worldwide. Every project we undertake reflects our core belief: that great engineering transforms communities, economies, and lives.
+    </p>
+    <p>
+      We have completed over 340 landmark projects across sectors including transportation, energy, commercial, and residential infrastructure — consistently on time and within budget.
+    </p>
+
+    <div class="about-values">
+      <div class="value-item">
+        <strong>Precision</strong>
+        <span>Every detail engineered to exact specification</span>
+      </div>
+      <div class="value-item">
+        <strong>Sustainability</strong>
+        <span>Green-certified on 100% of new projects</span>
+      </div>
+      <div class="value-item">
+        <strong>Innovation</strong>
+        <span>Leading adoption of BIM & digital twin tech</span>
+      </div>
+      <div class="value-item">
+        <strong>Integrity</strong>
+        <span>Transparent process, zero-compromise safety</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="faq-grid">
+    <div class="faq-sidebar fade-up">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Common<br/><em>Questions</em></h2>
+      <p>
+        Have a question not answered here? Reach out to our team directly via the contact section below — we typically respond within one business day.
+      </p>
+    </div>
+
+    <div class="faq-list fade-up">
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          What types of engineering services does Apex offer?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Apex Engineering Group offers a comprehensive range of services including structural engineering, civil infrastructure design, bridge engineering, geotechnical investigations, environmental engineering, industrial facility design, and urban development planning. We also provide project management and construction supervision services.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          How do I request a project proposal or feasibility study?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Simply fill out the contact form on this page or email us directly at proposals@apexeng.com. Include your project scope, location, timeline, and any available drawings or site data. Our business development team will respond within 48 hours with a preliminary assessment and arrange a discovery call.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Does Apex work on international projects?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Yes — Apex has active operations in 26 countries across North America, Europe, the Middle East, Asia-Pacific, and Africa. We have dedicated regional offices and partner networks to ensure compliance with local regulations, codes, and practices in every jurisdiction we operate in.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          What is your typical project delivery timeline?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Timelines vary significantly by project type. Feasibility studies typically take 4–8 weeks. Detailed design phases for mid-scale projects run 3–9 months. Large infrastructure projects may span 1–3 years from design to commissioning. We pride ourselves on a 98% on-time delivery record, underpinned by rigorous project scheduling methodologies.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Are your engineers licensed and certified?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            All of our licensed engineers hold Professional Engineer (PE) credentials in their respective jurisdictions. Our firm holds ISO 9001:2015 quality management certification and is accredited by major engineering bodies including ASCE, ICE, and Engineers Australia. We maintain active certifications in LEED, BREEAM, and other sustainability standards.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Does Apex offer construction monitoring and site supervision?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Yes. Beyond design, we offer full construction engineering and inspection (CEI) services including resident engineering, quality assurance programs, progress monitoring, and commissioning support. This ensures that built structures conform precisely to design intent and safety standards.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          How does Apex approach sustainability in its projects?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Sustainability is embedded in our design philosophy, not an afterthought. Since 2020, 100% of our new projects target green building certification. We use life-cycle assessment (LCA) tools, prioritize low-carbon materials, design for adaptive reuse, and integrate renewable energy systems where feasible. Our 2030 pledge commits to net-zero embodied carbon across all projects.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="border-top: 1px solid var(--border);">
+  <div class="contact-info fade-up">
+    <div class="section-label">Get In Touch</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,5vw,72px);line-height:0.95;color:var(--white);letter-spacing:1px;margin-bottom:24px;">
+      Let's Build<br/><em style="font-family:'Fraunces',serif;font-style:italic;font-weight:300;color:var(--amber);">Something</em><br/>Great
+    </h2>
+    <p>
+      Whether you're scoping a new development, need an independent structural review, or want to explore a long-term partnership — we'd love to hear from you.
+    </p>
+
+    <div class="contact-details">
+      <div class="contact-detail-item">
+        <div class="contact-icon">✉</div>
+        <div>
+          <div class="contact-detail-label">Email</div>
+          <div class="contact-detail-value">contact@apexengineering.com</div>
+        </div>
+      </div>
+      <div class="contact-detail-item">
+        <div class="contact-icon">☎</div>
+        <div>
+          <div class="contact-detail-label">Phone</div>
+          <div class="contact-detail-value">+1 (800) 427-3900</div>
+        </div>
+      </div>
+      <div class="contact-detail-item">
+        <div class="contact-icon">◎</div>
+        <div>
+          <div class="contact-detail-label">Headquarters</div>
+          <div class="contact-detail-value">1 Apex Plaza, Chicago, IL 60601, USA</div>
+        </div>
+      </div>
+      <div class="contact-detail-item">
+        <div class="contact-icon">◷</div>
+        <div>
+          <div class="contact-detail-label">Business Hours</div>
+          <div class="contact-detail-value">Mon – Fri, 8:00 AM – 6:00 PM CST</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fade-up">
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name *</label>
+          <input class="form-input" type="text" placeholder="John" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name *</label>
+          <input class="form-input" type="text" placeholder="Smith" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <input class="form-input" type="email" placeholder="john.smith@company.com" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Company / Organization</label>
+        <input class="form-input" type="text" placeholder="Smith Holdings LLC" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Service of Interest *</label>
+          <select class="form-select form-input" required>
+            <option value="" disabled selected>Select a service</option>
+            <option>Structural Engineering</option>
+            <option>Civil Infrastructure</option>
+            <option>Bridge Design</option>
+            <option>High-Rise / Commercial</option>
+            <option>Industrial Facilities</option>
+            <option>Environmental Engineering</option>
+            <option>Urban Development</option>
+            <option>General Inquiry</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Project Budget Range</label>
+          <select class="form-select form-input">
+            <option value="" disabled selected>Estimated budget</option>
+            <option>Under $500K</option>
+            <option>$500K – $2M</option>
+            <option>$2M – $10M</option>
+            <option>$10M – $50M</option>
+            <option>$50M+</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Message *</label>
+        <textarea class="form-textarea" placeholder="Describe your project, location, timeline, and any specific requirements..." required></textarea>
+      </div>
+
+      <button type="submit" class="form-submit">
+        Send Message
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+        </svg>
+      </button>
+
+      <div class="form-success" id="form-success">
+        ✓ &nbsp; Message received. Our team will respond within 1 business day.
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">APEX <span>Engineering</span></div>
+  <p class="footer-copy">© 2024 Apex Engineering Group. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="#">Privacy Policy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Careers</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  // ── THEME TOGGLE ──
+  const html = document.documentElement;
+  const toggle = document.getElementById('theme-toggle');
+  const label = document.getElementById('theme-label');
+
+  const saved = localStorage.getItem('apex-theme') ||
+    (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+
+  function applyTheme(theme) {
+    html.setAttribute('data-theme', theme);
+    label.textContent = theme === 'dark' ? 'Dark' : 'Light';
+    localStorage.setItem('apex-theme', theme);
+  }
+
+  applyTheme(saved);
+
+  toggle.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  // ── FAQ TOGGLE ──
+  function toggleFaq(btn) {
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.classList.remove('open');
+      q.nextElementSibling.style.maxHeight = '0';
+    });
+    if (!isOpen) {
+      btn.classList.add('open');
+      const ans = btn.nextElementSibling;
+      ans.style.maxHeight = ans.scrollHeight + 'px';
+    }
+  }
+
+  // ── CONTACT FORM ──
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+      e.target.reset();
+    }, 1200);
+  }
+
+  // ── SCROLL ANIMATIONS ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ── STAGGER PROJECT CARDS ──
+  document.querySelectorAll('.project-card').forEach((card, i) => {
+    card.style.transitionDelay = (i * 80) + 'ms';
+  });
+
+  // ── NAV HIGHLIGHT ──
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 100) current = sec.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current
+        ? 'var(--amber)' : '';
+    });
+  });
+</script>
+</body>
+</html>
