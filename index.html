@@ -833,7 +833,12 @@
     margin: 0 48px;
   }
 
-  /* ── ANIMATIONS ── */
+  /* ── ANIMATIONS ──*/
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
   .fade-up {
     opacity: 0;
     transform: translateY(30px);
@@ -916,6 +921,132 @@
     gap: 20px;
   }
 
+  /* ── CUSTOM CURSOR ── */
+  @media (pointer: fine) {
+    *, *::before, *::after { cursor: none !important; }
+
+    #cursor-dot {
+      position: fixed;
+      top: 0; left: 0;
+      width: 6px; height: 6px;
+      background: var(--amber);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s, opacity 0.2s;
+      will-change: transform;
+    }
+
+    #cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--amber);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99998;
+      transform: translate(-50%, -50%);
+      transition: width 0.35s cubic-bezier(0.23,1,0.32,1),
+                  height 0.35s cubic-bezier(0.23,1,0.32,1),
+                  border-color 0.3s, background 0.3s, opacity 0.3s,
+                  border-radius 0.3s;
+      will-change: transform;
+      opacity: 0.7;
+    }
+
+    /* Crosshair arms */
+    #cursor-ring::before,
+    #cursor-ring::after {
+      content: '';
+      position: absolute;
+      background: var(--amber);
+      opacity: 0.5;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    #cursor-ring::before {
+      width: 1px; height: 8px;
+      top: -10px; left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 44px 0 var(--amber);
+    }
+    #cursor-ring::after {
+      width: 8px; height: 1px;
+      left: -10px; top: 50%;
+      transform: translateY(-50%);
+      box-shadow: 44px 0 0 var(--amber);
+    }
+
+    /* Hover state — ring expands, crosshair hides */
+    body.cursor-hover #cursor-dot {
+      width: 4px; height: 4px;
+      opacity: 0.6;
+    }
+    body.cursor-hover #cursor-ring {
+      width: 52px; height: 52px;
+      border-color: var(--amber);
+      background: rgba(240,165,0,0.07);
+      opacity: 1;
+    }
+    body.cursor-hover #cursor-ring::before,
+    body.cursor-hover #cursor-ring::after { opacity: 0; }
+
+    /* Click state — ring snaps in */
+    body.cursor-click #cursor-dot {
+      width: 10px; height: 10px;
+      background: var(--amber);
+    }
+    body.cursor-click #cursor-ring {
+      width: 22px; height: 22px;
+      border-color: var(--amber);
+      opacity: 1;
+    }
+
+    /* Text cursor state */
+    body.cursor-text #cursor-dot {
+      width: 2px; height: 22px;
+      border-radius: 1px;
+      background: var(--amber);
+    }
+    body.cursor-text #cursor-ring {
+      opacity: 0;
+    }
+
+    /* Cursor trail particles */
+    .cursor-trail {
+      position: fixed;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--amber);
+      pointer-events: none;
+      z-index: 99997;
+      transform: translate(-50%, -50%);
+      animation: trailFade 0.6s ease forwards;
+    }
+
+    @keyframes trailFade {
+      0%   { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+      100% { opacity: 0;   transform: translate(-50%,-50%) scale(0); }
+    }
+
+    /* Click burst */
+    .cursor-burst {
+      position: fixed;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      pointer-events: none;
+      z-index: 99997;
+      transform: translate(-50%, -50%);
+      animation: burstOut 0.5s ease forwards;
+    }
+
+    @keyframes burstOut {
+      0%   { opacity: 0.9; transform: translate(-50%,-50%) scale(1); }
+      100% { opacity: 0;   transform: translate(var(--bx), var(--by)) scale(0.2); }
+    }
+  }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
@@ -935,6 +1066,10 @@
 </style>
 </head>
 <body>
+
+<!-- CUSTOM CURSOR ELEMENTS -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
 
 <!-- NAV -->
 <nav>
@@ -1177,7 +1312,7 @@
         </button>
         <div class="faq-answer">
           <div class="faq-answer-inner">
-            Simply fill out the contact form on this page or email us directly at proposals@apexeng.com. Include your project scope, location, timeline, and any available drawings or site data. Our business development team will respond within 48 hours with a preliminary assessment and arrange a discovery call.
+            Simply fill out the contact form on this page or email us directly at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="98e8eaf7e8f7ebf9f4ebd8f9e8fde0fdf6ffb6fbf7f5">[email&#160;protected]</a>. Include your project scope, location, timeline, and any available drawings or site data. Our business development team will respond within 48 hours with a preliminary assessment and arrange a discovery call.
           </div>
         </div>
       </div>
@@ -1262,7 +1397,7 @@
         <div class="contact-icon">✉</div>
         <div>
           <div class="contact-detail-label">Email</div>
-          <div class="contact-detail-value">contact@apexengineering.com</div>
+          <div class="contact-detail-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="395a56574d585a4d7958495c415c575e50575c5c4b50575e175a5654">[email&#160;protected]</a></div>
         </div>
       </div>
       <div class="contact-detail-item">
@@ -1290,32 +1425,44 @@
   </div>
 
   <div class="fade-up">
-    <form class="contact-form" onsubmit="handleSubmit(event)">
+    <form class="contact-form" id="contact-form" onsubmit="handleSubmit(event)" novalidate>
+
+      <!-- Web3Forms hidden fields -->
+      <!-- ⚠️  PASTE YOUR WEB3FORMS ACCESS KEY BELOW
+           Get it free in 30 seconds: https://web3forms.com
+           Enter rynelbolanos0@gmail.com → check your inbox → copy the key -->
+      <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+      <input type="hidden" name="subject"    value="New Project Inquiry — Apex Engineering Website" />
+      <input type="hidden" name="from_name"  value="Apex Engineering Contact Form" />
+      <input type="hidden" name="redirect"   value="false" />
+      <!-- honeypot spam protection -->
+      <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
+
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">First Name *</label>
-          <input class="form-input" type="text" placeholder="John" required />
+          <label class="form-label" for="first-name">First Name *</label>
+          <input id="first-name" class="form-input" name="first_name" type="text" placeholder="John" required autocomplete="given-name" />
         </div>
         <div class="form-group">
-          <label class="form-label">Last Name *</label>
-          <input class="form-input" type="text" placeholder="Smith" required />
+          <label class="form-label" for="last-name">Last Name *</label>
+          <input id="last-name" class="form-input" name="last_name" type="text" placeholder="Smith" required autocomplete="family-name" />
         </div>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Email Address *</label>
-        <input class="form-input" type="email" placeholder="john.smith@company.com" required />
+        <label class="form-label" for="email">Email Address *</label>
+        <input id="email" class="form-input" name="email" type="email" placeholder="john.smith@company.com" required autocomplete="email" />
       </div>
 
       <div class="form-group">
-        <label class="form-label">Company / Organization</label>
-        <input class="form-input" type="text" placeholder="Smith Holdings LLC" />
+        <label class="form-label" for="company">Company / Organization</label>
+        <input id="company" class="form-input" name="company" type="text" placeholder="Smith Holdings LLC" autocomplete="organization" />
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Service of Interest *</label>
-          <select class="form-select form-input" required>
+          <label class="form-label" for="service">Service of Interest *</label>
+          <select id="service" class="form-select form-input" name="service" required>
             <option value="" disabled selected>Select a service</option>
             <option>Structural Engineering</option>
             <option>Civil Infrastructure</option>
@@ -1328,8 +1475,8 @@
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Project Budget Range</label>
-          <select class="form-select form-input">
+          <label class="form-label" for="budget">Project Budget Range</label>
+          <select id="budget" class="form-select form-input" name="budget">
             <option value="" disabled selected>Estimated budget</option>
             <option>Under $500K</option>
             <option>$500K – $2M</option>
@@ -1341,20 +1488,36 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Message *</label>
-        <textarea class="form-textarea" placeholder="Describe your project, location, timeline, and any specific requirements..." required></textarea>
+        <label class="form-label" for="message">Message *</label>
+        <textarea id="message" class="form-textarea" name="message" placeholder="Describe your project, location, timeline, and any specific requirements..." required></textarea>
       </div>
 
-      <button type="submit" class="form-submit">
-        Send Message
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <!-- Submit button -->
+      <button type="submit" class="form-submit" id="submit-btn">
+        <span id="btn-text">Send Message</span>
+        <span id="btn-spinner" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 0.8s linear infinite">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+        </span>
+        <svg id="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
           <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
         </svg>
       </button>
 
-      <div class="form-success" id="form-success">
-        ✓ &nbsp; Message received. Our team will respond within 1 business day.
+      <!-- Status messages -->
+      <div id="form-success" style="display:none; background:var(--amber-glow); border:1px solid var(--amber); padding:16px 20px; color:var(--amber); font-size:12px; margin-top:12px; line-height:1.6;">
+        ✓ &nbsp;<strong>Message sent!</strong> We've received your inquiry and will reply to your email within 1 business day.
       </div>
+      <div id="form-error" style="display:none; background:rgba(220,50,50,0.08); border:1px solid rgba(220,50,50,0.4); padding:16px 20px; color:#e06060; font-size:12px; margin-top:12px; line-height:1.6;">
+        ✕ &nbsp;<strong>Sending failed.</strong> Please try again, or email us directly at <a href="/cdn-cgi/l/email-protection#c8bab1a6ada4aaa7a4a9a6a7bbf888afa5a9a1a4e6aba7a5" style="color:inherit;text-decoration:underline;"><span class="__cf_email__" data-cfemail="addfd4c3c8c1cfc2c1ccc3c2de9dedcac0ccc4c183cec2c0">[email&#160;protected]</span></a>
+      </div>
+      <div id="form-key-warning" style="display:none; background:rgba(240,165,0,0.08); border:1px solid rgba(240,165,0,0.35); padding:14px 18px; color:var(--amber); font-size:11px; margin-top:12px; line-height:1.7;">
+        ⚠ &nbsp;<strong>Setup needed:</strong> Replace <code style="background:rgba(0,0,0,0.2);padding:1px 5px;">YOUR_ACCESS_KEY_HERE</code> in the HTML with your free key from
+        <a href="https://web3forms.com" target="_blank" style="color:inherit;text-decoration:underline;">web3forms.com</a>
+        — enter <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="57252e39323b35383b363938246717303a363e3b7934383a">[email&#160;protected]</a></strong>, check your inbox, and paste the key.
+      </div>
+
     </form>
   </div>
 </section>
@@ -1371,7 +1534,7 @@
   </ul>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ── THEME TOGGLE ──
   const html = document.documentElement;
   const toggle = document.getElementById('theme-toggle');
@@ -1407,17 +1570,74 @@
     }
   }
 
-  // ── CONTACT FORM ──
-  function handleSubmit(e) {
+  // ── CONTACT FORM (Web3Forms) ──
+  async function handleSubmit(e) {
     e.preventDefault();
-    const btn = e.target.querySelector('.form-submit');
-    btn.textContent = 'Sending…';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.style.display = 'none';
-      document.getElementById('form-success').style.display = 'block';
-      e.target.reset();
-    }, 1200);
+    const form      = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnText   = document.getElementById('btn-text');
+    const btnIcon   = document.getElementById('btn-icon');
+    const btnSpin   = document.getElementById('btn-spinner');
+    const successEl = document.getElementById('form-success');
+    const errorEl   = document.getElementById('form-error');
+    const warnEl    = document.getElementById('form-key-warning');
+
+    // Hide previous status messages
+    successEl.style.display = 'none';
+    errorEl.style.display   = 'none';
+    warnEl.style.display    = 'none';
+
+    // Guard: warn if key hasn't been replaced yet
+    const key = form.querySelector('[name="access_key"]').value.trim();
+    if (!key || key === 'YOUR_ACCESS_KEY_HERE') {
+      warnEl.style.display = 'block';
+      warnEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
+
+    // Loading state
+    submitBtn.disabled = true;
+    btnText.textContent = 'Sending…';
+    btnIcon.style.display = 'none';
+    btnSpin.style.display = 'inline-flex';
+
+    try {
+      const data = Object.fromEntries(new FormData(form));
+      const res  = await fetch('https://api.web3forms.com/submit', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body:    JSON.stringify(data)
+      });
+      const json = await res.json();
+
+      if (res.ok && json.success) {
+        // ✅ Success
+        form.reset();
+        successEl.style.display = 'block';
+        successEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        btnText.textContent = '✓ Sent!';
+        submitBtn.style.background = '#2a7a2a';
+        setTimeout(() => {
+          btnText.textContent = 'Send Message';
+          submitBtn.style.background = '';
+          submitBtn.disabled = false;
+          btnIcon.style.display = 'inline';
+          btnSpin.style.display = 'none';
+          successEl.style.display = 'none';
+        }, 6000);
+      } else {
+        throw new Error(json.message || 'Submission failed');
+      }
+    } catch (err) {
+      // ❌ Error
+      errorEl.style.display = 'block';
+      errorEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      btnText.textContent = 'Send Message';
+      submitBtn.disabled  = false;
+      btnIcon.style.display = 'inline';
+      btnSpin.style.display = 'none';
+      console.error('Form error:', err);
+    }
   }
 
   // ── SCROLL ANIMATIONS ──
@@ -1434,12 +1654,12 @@
 
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-  // ── STAGGER PROJECT CARDS ──
+  // STAGGER PROJECT CARDS
   document.querySelectorAll('.project-card').forEach((card, i) => {
     card.style.transitionDelay = (i * 80) + 'ms';
   });
 
-  // ── NAV HIGHLIGHT ──
+  // NAV HIGHLIGHT
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a');
 
@@ -1449,10 +1669,87 @@
       if (window.scrollY >= sec.offsetTop - 100) current = sec.id;
     });
     navLinks.forEach(a => {
-      a.style.color = a.getAttribute('href') === '#' + current
-        ? 'var(--amber)' : '';
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--amber)' : '';
     });
   });
+
+  // CUSTOM CURSOR
+  (function() {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    const body = document.body;
+    let mx = -200, my = -200, rx = -200, ry = -200;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = 'translate(calc(' + mx + 'px - 50%), calc(' + my + 'px - 50%))';
+    });
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+    (function animateRing() {
+      rx = lerp(rx, mx, 0.12);
+      ry = lerp(ry, my, 0.12);
+      ring.style.transform = 'translate(calc(' + rx + 'px - 50%), calc(' + ry + 'px - 50%))';
+      requestAnimationFrame(animateRing);
+    })();
+
+    const hoverTargets = 'a, button, [role="button"], select, .project-card, .faq-question, .theme-toggle';
+    const textTargets  = 'input, textarea';
+
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest(textTargets)) {
+        body.classList.remove('cursor-hover');
+        body.classList.add('cursor-text');
+      } else if (e.target.closest(hoverTargets)) {
+        body.classList.remove('cursor-text');
+        body.classList.add('cursor-hover');
+      }
+    });
+
+    document.addEventListener('mouseout', e => {
+      if (!e.relatedTarget || !e.relatedTarget.closest(hoverTargets + ', ' + textTargets)) {
+        body.classList.remove('cursor-hover', 'cursor-text');
+      }
+    });
+
+    document.addEventListener('mousedown', e => {
+      body.classList.add('cursor-click');
+      for (let i = 0; i < 8; i++) {
+        const p = document.createElement('div');
+        p.className = 'cursor-burst';
+        const angle = (i / 8) * Math.PI * 2;
+        const dist  = 24 + Math.random() * 12;
+        p.style.setProperty('--bx', (Math.cos(angle) * dist - 3) + 'px');
+        p.style.setProperty('--by', (Math.sin(angle) * dist - 3) + 'px');
+        p.style.left = mx + 'px';
+        p.style.top  = my + 'px';
+        document.body.appendChild(p);
+        p.addEventListener('animationend', () => p.remove());
+      }
+    });
+
+    document.addEventListener('mouseup', () => body.classList.remove('cursor-click'));
+
+    let lastTrail = 0;
+    document.addEventListener('mousemove', e => {
+      const now = Date.now();
+      if (now - lastTrail < 55) return;
+      lastTrail = now;
+      const t = document.createElement('div');
+      t.className = 'cursor-trail';
+      t.style.left = e.clientX + 'px';
+      t.style.top  = e.clientY + 'px';
+      const sz = (2 + Math.random() * 3) + 'px';
+      t.style.width = sz; t.style.height = sz;
+      document.body.appendChild(t);
+      t.addEventListener('animationend', () => t.remove());
+    });
+
+    document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
+    document.addEventListener('mouseenter', () => { dot.style.opacity = ''; ring.style.opacity = ''; });
+  })();
+
 </script>
 </body>
 </html>
